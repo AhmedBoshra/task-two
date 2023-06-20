@@ -62,19 +62,6 @@ const getExamById = (req, res) => {
     // Fetch exam definition
     const examDefinition = instanceResults.rows[0];
     res.status(200).json({ examDefinition });
-
-    // pool.query(
-    //   queries.getExamDefinitionById,
-    //   [examDefinitionId],
-    //   (error, definitionResults) => {
-    //     if (error) throw error;
-
-    //     const examInstance = instanceResults.rows[0];
-    //     const examDefinition = definitionResults.rows[0];
-
-    //     res.status(200).json({ examInstance, examDefinition });
-    //   }
-    // );
   });
 };
 
@@ -86,10 +73,33 @@ const getExamInstanceById = async (req, res) => {
   });
 };
 
+const editExamInstanceById = async (req, res) => {
+  try {
+    const { startedtime, endtime, score, Questions } = req.body;
+    const duration = Math.floor(
+      (new Date(endtime) - new Date(startedtime)) / (1000 * 60)
+    );
+    const status = "Completed";
+
+    const examInstanceId = parseInt(req.params.id);
+
+    const editExamInstanceQuery = await pool.query(
+      queries.editExamInstanceById,
+      [duration, startedtime, endtime, score, Questions, status, examInstanceId]
+    );
+
+    res.status(200).send("Exam Instance updated successfully!");
+  } catch (error) {
+    console.error("Error editing exam instance:", error);
+    res.status(500).send("Error editing exam instance");
+  }
+};
+
 module.exports = {
   createExamDefinition,
   getExams,
   getExamById,
   createExamInstance,
   getExamInstanceById,
+  editExamInstanceById,
 };

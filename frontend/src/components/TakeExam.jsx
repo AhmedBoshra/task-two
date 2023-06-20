@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ListGroup, Button, Card, Form } from "react-bootstrap";
+import { Button, Card, Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
@@ -59,7 +59,6 @@ const TakeExam = () => {
       setTimer((prevTimer) => {
         if (prevTimer === 0) {
           clearInterval(countdown);
-          // Add your logic for handling timer expiration here
           console.log("Timer expired");
         }
         return prevTimer - 1;
@@ -130,13 +129,34 @@ const TakeExam = () => {
 
     setScore(currentScore);
 
-    setScore(currentScore);
-
     // Set pass/fail message
     if (currentScore >= 50) {
       setPassFailMessage("You passed!");
     } else {
       setPassFailMessage("You failed, please try again later.");
+    }
+
+    // Get the current time when the submit button is clicked
+    const endtime = new Date();
+
+    // Prepare the data to send to the server
+    const examInstanceData = {
+      score: currentScore,
+      Questions: questions,
+      startedtime: exam.startedtime,
+      endtime: endtime.toISOString(),
+    };
+
+    console.log(examInstanceData);
+
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/editexaminstance/${id}`,
+        examInstanceData
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error updating exam instance:", error);
     }
   };
 
