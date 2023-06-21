@@ -3,7 +3,7 @@ import { Button, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import LoadStudents from "./LoadStudents";
-import { getAccessToken } from "../hooks/gettingUsers";
+import { getAccessToken } from "../hooks/GettingUsers";
 
 const CreateExamInstance = () => {
   const [examDefinitionId, setExamDefinitionId] = useState("");

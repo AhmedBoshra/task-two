@@ -3,14 +3,19 @@ import { useState, useEffect } from "react";
 
 export const getAccessToken = async () => {
   try {
+    console.log("Sending authentication request...");
+
     const response = await axios.post(
       "http://127.0.0.1:8080/realms/examengine/protocol/openid-connect/token",
       new URLSearchParams({
+        username: "admin",
+        password: "admin",
+        grant_type: "password",
         client_id: "examengine",
-        client_secret: "NbA6iMn2XQGW8xqccPxHjrqzqlKkvCEV",
-        grant_type: "client_credentials",
       }).toString()
     );
+
+    console.log("Authentication request successful.");
 
     const { access_token } = response.data;
     return access_token;
@@ -43,7 +48,7 @@ export const filterStudentUsers = (usersData) => {
   });
 };
 
-const gettingUsers = () => {
+export const GettingUsers = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -73,4 +78,4 @@ const gettingUsers = () => {
   );
 };
 
-export default gettingUsers;
+export default GettingUsers;

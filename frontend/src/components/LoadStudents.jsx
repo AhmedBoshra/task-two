@@ -3,7 +3,7 @@ import {
   getAccessToken,
   getUsersWithToken,
   filterStudentUsers,
-} from "../hooks/gettingUsers";
+} from "../hooks/GettingUsers";
 import { Form } from "react-bootstrap";
 
 const LoadStudents = ({ selectedValue, onSelect }) => {
