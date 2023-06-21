@@ -73,19 +73,40 @@ const getExamInstanceById = async (req, res) => {
   });
 };
 
+const getExamInstances = async (req, res) => {
+  pool.query(queries.getExamInstances, (error, results) => {
+    if (error) throw error;
+    results.rows.map(async (r) => {
+      const examDefinition = await pool.query(queries.getExamDefinitionById, [
+        r.examDefinitionId,
+      ]);
+      r.examDefinition = examDefinition.rows[0];
+    });
+    res.status(200).json(results.rows);
+  });
+};
+
+// const getExamInstanceByStudentId = async (req, res) => {
+//   const studentId = parseInt(req.params.studentId);
+//   pool.query(queries.getExamInstanceByStudentId, [id], (error, results) => {
+//     if (error) throw error;
+//     res.status(200).json(results.rows);
+//   });
+// };
+
 const editExamInstanceById = async (req, res) => {
   try {
-    const { startedtime, endtime, score, Questions } = req.body;
-    const duration = Math.floor(
-      (new Date(endtime) - new Date(startedtime)) / (1000 * 60)
-    );
-    const status = "Completed";
+    const { score, questions } = req.body;
+    console.log(score);
+    console.log(questions);
+    const status = "absent";
 
     const examInstanceId = parseInt(req.params.id);
+    console.log(examInstanceId);
 
     const editExamInstanceQuery = await pool.query(
       queries.editExamInstanceById,
-      [duration, startedtime, endtime, score, Questions, status, examInstanceId]
+      [score, questions, status, examInstanceId]
     );
 
     res.status(200).send("Exam Instance updated successfully!");
@@ -102,4 +123,5 @@ module.exports = {
   createExamInstance,
   getExamInstanceById,
   editExamInstanceById,
+  getExamInstances,
 };

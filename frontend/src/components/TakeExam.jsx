@@ -5,7 +5,6 @@ import axios from "axios";
 
 const TakeExam = () => {
   const { id } = useParams();
-
   const [exam, setExam] = useState({});
   const [questions, setQuestions] = useState([]);
   const [timer, setTimer] = useState(60 * 60);
@@ -104,9 +103,8 @@ const TakeExam = () => {
     }
   };
 
+  //testing currentScore
   const handleSubmit = async () => {
-    console.log("Exam submitted");
-
     // Calculate score
     const totalQuestions = questions.length;
     let correctAnswers = 0;
@@ -136,25 +134,20 @@ const TakeExam = () => {
       setPassFailMessage("You failed, please try again later.");
     }
 
-    // Get the current time when the submit button is clicked
-    const endtime = new Date();
-
-    // Prepare the data to send to the server
+    // const currentScore = 24;
     const examInstanceData = {
       score: currentScore,
-      Questions: questions,
-      startedtime: exam.startedtime,
-      endtime: endtime.toISOString(),
+      questions: null,
     };
-
-    console.log(examInstanceData);
+    console.log("Exam Instance Data:", examInstanceData);
 
     try {
       const response = await axios.put(
         `http://localhost:5000/api/editexaminstance/${id}`,
         examInstanceData
       );
-      console.log(response.data);
+      console.log("Response from API:", response.data);
+      console.log("Exam instance data updated successfully!");
     } catch (error) {
       console.error("Error updating exam instance:", error);
     }

@@ -37,7 +37,7 @@ const LoadStudents = ({ selectedValue, onSelect }) => {
       <option value="">Select a student</option>
       {users.map((user) => (
         <option key={user.id} value={user.name}>
-          {user.username}
+          {user.id}
         </option>
       ))}
     </Form.Select>

@@ -7,17 +7,17 @@ const createExamInstance =
   "INSERT INTO examInstance (examDefinationId, createdBy, takenBy, status) VALUES ($1, $2, $3, $4)";
 const checkDefinitionExists = "SELECT * FROM examDefinition WHERE id = $1";
 const getExamInstanceById = "SELECT * FROM examInstance WHERE id = $1";
+const getExamInstances = "SELECT * FROM examInstance";
+const getExamInstanceByStudentId =
+  "SELECT * FROM examInstance WHERE takenby = $1";
 const editExamInstanceById = `
   UPDATE examInstance
   SET
-    duration = $1,
-    startedtime = $2,
-    endtime = $3,
-    score = $4,
-    Questions = $5,
-    status = $6
+    score = $1,
+    questions = $2,
+    status = $3
   WHERE
-    id = $7;
+    id = $4;
 `;
 
 module.exports = {
@@ -29,4 +29,6 @@ module.exports = {
   checkDefinitionExists,
   getExamInstanceById,
   editExamInstanceById,
+  getExamInstanceByStudentId,
+  getExamInstances,
 };

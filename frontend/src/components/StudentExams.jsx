@@ -12,7 +12,9 @@ const StudentExams = () => {
   useEffect(() => {
     const fetchExams = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/getexams");
+        const response = await axios.get(
+          "http://localhost:5000/api/getexaminstances"
+        );
         const examsData = response.data;
         setExams(examsData);
         console.log(examsData);
