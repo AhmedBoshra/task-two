@@ -74,25 +74,35 @@ const getExamInstanceById = async (req, res) => {
 };
 
 const getExamInstances = async (req, res) => {
-  pool.query(queries.getExamInstances, (error, results) => {
-    if (error) throw error;
-    results.rows.map(async (r) => {
-      const examDefinition = await pool.query(queries.getExamDefinitionById, [
-        r.examDefinitionId,
+  const studentId = req.query.userid;
+  console.log(studentId);
+  try {
+    const results = await new Promise((resolve, reject) => {
+      pool.query(
+        queries.getExamInstanceByStudentId,
+        [studentId],
+        (error, results) => {
+          if (error) reject(error);
+          resolve(results);
+        }
+      );
+    });
+
+    const promises = results.rows.map(async (r) => {
+      const examDefinition = await pool.query(queries.getExamById, [
+        r.examdefinationid,
       ]);
       r.examDefinition = examDefinition.rows[0];
+      return r;
     });
-    res.status(200).json(results.rows);
-  });
-};
 
-// const getExamInstanceByStudentId = async (req, res) => {
-//   const studentId = parseInt(req.params.studentId);
-//   pool.query(queries.getExamInstanceByStudentId, [id], (error, results) => {
-//     if (error) throw error;
-//     res.status(200).json(results.rows);
-//   });
-// };
+    const updatedResults = await Promise.all(promises);
+    res.status(200).json(updatedResults);
+  } catch (error) {
+    console.error("Error retrieving exam instances:", error);
+    res.status(500).send("Error retrieving exam instances");
+  }
+};
 
 const editExamInstanceById = async (req, res) => {
   try {

@@ -51,7 +51,10 @@ const App = () => {
           {isLogin && <Route path="/" element={<HomePage />} />}
 
           {isLogin && userType === "student" && (
-            <Route path="/studentexams" element={<StudentExams />} />
+            <Route
+              path="/studentexams"
+              element={<StudentExams decodedToken={decodedToken} />}
+            />
           )}
 
           {isLogin && userType === "teacher" && (
@@ -67,7 +70,7 @@ const App = () => {
           )}
 
           {isLogin && userType === "student" && (
-            <Route path="/take-exam/:id" element={<TakeExam />} />
+            <Route path="/take-exam/:eid/:did" element={<TakeExam />} />
           )}
         </Routes>
       </div>

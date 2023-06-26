@@ -4,16 +4,20 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ExamDetails from "./ExamDetails";
 
-const StudentExams = () => {
+const StudentExams = (props) => {
   const [exams, setExams] = useState([]);
   const [selectedExam, setSelectedExam] = useState(null);
   const navigate = useNavigate();
 
+  console.log(props);
   useEffect(() => {
     const fetchExams = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/getexaminstances"
+          "http://localhost:5000/api/getexaminstances",
+          {
+            params: { userid: props.decodedToken.sub },
+          }
         );
         const examsData = response.data;
         setExams(examsData);
@@ -26,8 +30,8 @@ const StudentExams = () => {
     fetchExams();
   }, []);
 
-  const handleExamClick = (examId) => {
-    navigate(`/take-exam/${examId}`);
+  const handleExamClick = (examId, definitionId) => {
+    navigate(`/take-exam/${examId}/${definitionId}`);
     const selectedExam = exams.find((exam) => exam.id === examId);
     setSelectedExam(selectedExam);
   };
@@ -42,9 +46,9 @@ const StudentExams = () => {
               variant="primary"
               className="mt-3"
               block="true"
-              onClick={() => handleExamClick(exam.id)}
+              onClick={() => handleExamClick(exam.id, exam.examdefinationid)}
             >
-              {exam.name}
+              {exam.examDefinition.name}
             </Button>
           </Col>
         ))}

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const TakeExam = () => {
-  const { id } = useParams();
+  const { eid, did } = useParams();
   const [exam, setExam] = useState({});
   const [questions, setQuestions] = useState([]);
   const [timer, setTimer] = useState(60 * 60);
@@ -16,7 +16,7 @@ const TakeExam = () => {
     const fetchExams = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/getexams/" + id
+          "http://localhost:5000/api/getexams/" + did
         );
         const examsData = response.data;
         response.data.examDefinition.questions.map((id) => {
@@ -143,7 +143,7 @@ const TakeExam = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/editexaminstance/${id}`,
+        `http://localhost:5000/api/editexaminstance/${eid}`,
         examInstanceData
       );
       console.log("Response from API:", response.data);
